@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"time"
 
@@ -14,18 +15,49 @@ type Data_t struct {
 	UpdateDTTM time.Time `json:"update-dttm"`
 }
 
+var (
+	host          string
+	port          int
+	expiration    int
+	deleteAll     bool
+	deleteExpired bool
+	createTest    bool
+	outputKeys    bool
+)
+
 func main() {
+	// Process flags
+	flag.StringVar(&host, "h", "localhost", "Redis server hostname")
+	flag.IntVar(&port, "p", 6379, "Redis port")
+	flag.IntVar(&expiration, "e", 15, "Expiration in minutes")
+	flag.BoolVar(&deleteAll, "da", false, "Delete all keys")
+	flag.BoolVar(&deleteExpired, "de", false, "Delete expired keys")
+	flag.BoolVar(&createTest, "c", false, "Create test keys")
+	flag.BoolVar(&outputKeys, "o", false, "Output all keys")
+	flag.Parse()
+
 	// Connect to Redis Server
-	conn, err := redis.Dial("tcp", "10.0.0.180:6379", redis.DialPassword(""))
+	conn, err := redis.Dial("tcp", fmt.Sprintf("%s:%d", host, port), redis.DialPassword(""))
 	if err != nil {
 		panic(err)
 	}
 	defer conn.Close()
 
-	// createTestKeys(conn)
-	// deleteAllKeys(conn)
-	deleteExpiredKeys(conn, time.Minute)
-	// printAllKeys(conn)
+	if createTest {
+		createTestKeys(conn)
+	}
+
+	if deleteAll {
+		deleteAllKeys(conn)
+	}
+
+	if deleteExpired {
+		deleteExpiredKeys(conn, time.Duration(expiration)*time.Minute)
+	}
+
+	if outputKeys {
+		printAllKeys(conn)
+	}
 }
 
 // Get all keys and their values
@@ -62,7 +94,7 @@ func deleteAllKeys(conn redis.Conn) {
 	dataSet := getAllKeys(conn)
 
 	// Loop through all keys
-	for key, _ := range dataSet {
+	for key := range dataSet {
 		// Delete the key
 		_, err := conn.Do("DEL", key)
 		if err != nil {
@@ -83,11 +115,8 @@ func deleteExpiredKeys(conn redis.Conn, expiration time.Duration) {
 		checkDttm := time.Now()
 		updateDTTM := data.UpdateDTTM.Add(expiration)
 
-		fmt.Printf("UpdateDTTM: %s\n", updateDTTM)
-		fmt.Printf("CheckDTTM:  %s\n", checkDttm)
-		fmt.Printf("Delete: %v\n", updateDTTM.Before(checkDttm))
-
 		if updateDTTM.Before(checkDttm) {
+			fmt.Printf("Key %s is expired\n", key)
 			// Delete the key
 			_, err := conn.Do("DEL", key)
 			if err != nil {
