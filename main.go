@@ -28,6 +28,7 @@ func main() {
 	// printAllKeys(conn)
 }
 
+// Get all keys and their values
 func getAllKeys(conn redis.Conn) map[string]Data_t {
 	dataSet := make(map[string]Data_t)
 
@@ -56,6 +57,7 @@ func getAllKeys(conn redis.Conn) map[string]Data_t {
 	return dataSet
 }
 
+// Delete all keys, regardless of expiration
 func deleteAllKeys(conn redis.Conn) {
 	dataSet := getAllKeys(conn)
 
@@ -70,6 +72,7 @@ func deleteAllKeys(conn redis.Conn) {
 	}
 }
 
+// Delete expired keys. Provide expiration duration that will be added to the UpdateDTTM before comparing to the current time.
 func deleteExpiredKeys(conn redis.Conn, expiration time.Duration) {
 	dataSet := getAllKeys(conn)
 
@@ -97,6 +100,7 @@ func deleteExpiredKeys(conn redis.Conn, expiration time.Duration) {
 	fmt.Printf("Deleted %d keys\n\n", cnt)
 }
 
+// Create test keys
 func createTestKeys(conn redis.Conn) {
 	for i := 0; i < 10; i++ {
 		// create data
@@ -124,6 +128,7 @@ func createTestKeys(conn redis.Conn) {
 	}
 }
 
+// Print all keys
 func printAllKeys(conn redis.Conn) {
 	dataSet := getAllKeys(conn)
 
