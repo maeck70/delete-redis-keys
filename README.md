@@ -35,7 +35,14 @@ go run main.go -h my-redis-server -p 6380 -da
 ### Run the program:
 
    ```bash
-   go run main.go
+   go run main.go [flags]
+   ```
+
+### Build and install the program:
+
+   ```bash
+   make install
+   make clean
    ```
 
 ### Contributing
