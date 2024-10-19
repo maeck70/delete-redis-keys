@@ -27,8 +27,8 @@ var (
 
 func main() {
 	// Process flags
-	flag.StringVar(&host, "h", "localhost", "Redis server hostname")
-	flag.IntVar(&port, "p", 6379, "Redis port")
+	flag.StringVar(&host, "host", "localhost", "Redis server hostname")
+	flag.IntVar(&port, "port", 6379, "Redis port")
 	flag.IntVar(&expiration, "e", 15, "Expiration in minutes")
 	flag.BoolVar(&deleteAll, "da", false, "Delete all keys")
 	flag.BoolVar(&deleteExpired, "de", false, "Delete expired keys")

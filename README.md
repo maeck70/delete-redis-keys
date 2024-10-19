@@ -14,8 +14,8 @@ This application uses command line flags to control its behavior.
 
 **Flags:**
 
-* `-h`: Redis server hostname (default: `localhost`)
-* `-p`: Redis server port (default: `6379`)
+* `-host`: Redis server hostname (default: `localhost`)
+* `-port`: Redis server port (default: `6379`)
 * `-e`: Expiration duration for keys in minutes (default: `15`) used for `-de` flag.
 * `-da`: Delete all keys (default: `false`)
 * `-de`: Delete expired keys (default: `false`)
