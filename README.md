@@ -1,4 +1,4 @@
-## delete-redis-keys: A Go tool for managing Redis keys
+## redis-keys: A Go tool for managing Redis keys
 
 This Go application provides functionalities for managing keys in a Redis server. It allows you to:
 
