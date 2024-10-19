@@ -1,4 +1,4 @@
-module github.com/maeck70/delete-redis-keys
+module github.com/maeck70/redis-keys
 
 go 1.22.7
 
