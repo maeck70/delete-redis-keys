@@ -5,7 +5,7 @@ PROGRAM = delete-redis-keys
 
 # Build the program
 build:
-	go build -o $(PROGRAM) main.go
+	go build -o $(PROGRAM) -ldflags="-s" main.go
 
 # Install the program to /usr/local/bin
 install: build
